@@ -17,15 +17,15 @@ namespace FirstGame_DirectX
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 
-			currentLesson = new Lesson1();
+			currentLesson = new Lesson2();
 		}
 
 		protected override void Initialize()
 		{
 			currentLesson.Initialize();
 
-			_graphics.PreferredBackBufferWidth = 512;
-			_graphics.PreferredBackBufferHeight = 512;
+			_graphics.PreferredBackBufferWidth = 1080;
+			_graphics.PreferredBackBufferHeight = 786;
 			_graphics.ApplyChanges();
 
 			base.Initialize();

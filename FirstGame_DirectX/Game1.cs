@@ -12,12 +12,12 @@ namespace FirstGame_DirectX
 
 		public Game1()
 		{
-			_graphics = new GraphicsDeviceManager(this);
+			_graphics = new GraphicsDeviceManager( this );
 
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 
-			currentLesson = new Lesson2();
+			currentLesson = new Lesson3();
 		}
 
 		protected override void Initialize()
@@ -33,26 +33,26 @@ namespace FirstGame_DirectX
 
 		protected override void LoadContent()
 		{
-			_spriteBatch = new SpriteBatch(GraphicsDevice);
+			_spriteBatch = new SpriteBatch( GraphicsDevice );
 
-			currentLesson.LoadContent(Content, _graphics, _spriteBatch);
+			currentLesson.LoadContent( Content, _graphics, _spriteBatch );
 		}
 
-		protected override void Update(GameTime gameTime)
+		protected override void Update( GameTime gameTime )
 		{
-			if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+			if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
 				Exit();
 
-			currentLesson.Update(gameTime);
-			base.Update(gameTime);
+			currentLesson.Update( gameTime );
+			base.Update( gameTime );
 		}
 
-		protected override void Draw(GameTime gameTime)
+		protected override void Draw( GameTime gameTime )
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear( Color.CornflowerBlue );
 
-			currentLesson.Draw(gameTime, _graphics, _spriteBatch);
-			base.Draw(gameTime);
+			currentLesson.Draw( gameTime, _graphics, _spriteBatch );
+			base.Draw( gameTime );
 		}
 	}
 }

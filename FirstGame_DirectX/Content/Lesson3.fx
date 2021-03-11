@@ -10,6 +10,7 @@
 float4x4 World, View, Projection;
 
 float3 LightPosition, CameraPosition;
+float time;
 
 Texture2D DayTex;
 sampler2D DayTextureSampler = sampler_state
@@ -69,7 +70,7 @@ float4 MainPS( VertexShaderOutput input ) : COLOR
 	// Textures
 	float4 texColor = tex2D( DayTextureSampler, input.uv );
 	float4 nightColor = tex2D( NightTextureSampler, input.uv );
-	float4 cloudColor = tex2D( CloudsTextureSampler, input.uv );
+	float4 cloudColor = tex2D( CloudsTextureSampler, input.uv + half2( time, time ) );
 
 	// Calculate vector for lighting & specular
 	float3 viewDirection = normalize( input.worldPos - CameraPosition );

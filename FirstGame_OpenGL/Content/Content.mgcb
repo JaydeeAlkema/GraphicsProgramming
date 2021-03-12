@@ -159,6 +159,54 @@
 /processorParam:TextureFormat=Color
 /build:Lesson4_Resources/Ground039_2K_Normal.png
 
+#begin Lesson4_Resources/Heightmap_1_HighRes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Heightmap_1_HighRes.png
+
+#begin Lesson4_Resources/Heightmap_1_LowRes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Heightmap_1_LowRes.png
+
+#begin Lesson4_Resources/Heightmap_2_HighRes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Heightmap_2_HighRes.png
+
+#begin Lesson4_Resources/Heightmap_2_LowRes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Heightmap_2_LowRes.png
+
 #begin Lesson4_Resources/Lesson4.fx
 /importer:EffectImporter
 /processor:EffectProcessor

@@ -66,9 +66,8 @@ namespace FirstGame_OpenGL
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
 			effect = Content.Load<Effect>( "Lesson4_Resources/Lesson4" );
-			heightmap = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Normal" );
+			heightmap = Content.Load<Texture2D>( "Lesson4_Resources/Heightmap_2_LowRes" );
 			dirt = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Color" );
-			sky = Content.Load<TextureCube>( "Lesson4_Resources/sky_cube" );
 
 			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
 			foreach( ModelMesh mesh in cube.Meshes )
@@ -79,16 +78,81 @@ namespace FirstGame_OpenGL
 				}
 			}
 
-			GeneratePlane();
+			GeneratePlane( 2.0f, 96.0f );
 		}
 
 		private void GeneratePlane( float gridSize = 8.0f, float height = 128f )
 		{
 			// Get pixels
+			Color[] pixels = new Color[heightmap.Width * heightmap.Height];
+			heightmap.GetData<Color>( pixels );
 
-			//Generate vertices & indices
+			// Generate vertices & indices
+			vertices = new Vert[pixels.Length];
+			indices = new int[heightmap.Width * heightmap.Height * 6];
 
-			//Calculate normals
+			// For loops
+			for( int y = 0; y < heightmap.Height; y++ )
+			{
+				for( int x = 0; x < heightmap.Width; x++ )
+				{
+					int index = y * heightmap.Width + x;
+
+					float r = pixels[index].R / 255f;
+
+					// Smooth if not at the edges
+					if( y < heightmap.Height - 1 && x < heightmap.Width - 1 )
+					{
+						r += pixels[index + 1].R / 255f;
+						r += pixels[index + heightmap.Width].R / 255f;
+						r += pixels[index + heightmap.Width + 1].R / 255f;
+						r *= 0.5f;
+					}
+
+					// Add vertex for current pixel.
+					vertices[index] = new Vert( new Vector3( gridSize * x, r * height, gridSize * y ), // Position
+													Vector3.Up, Vector3.Up, Vector3.Up, // Normals
+													new Vector2( x / ( float )heightmap.Width, y / ( float )heightmap.Height ) // UV
+													);
+
+					// If not at edge
+					if( y < heightmap.Height - 2 && x < heightmap.Width - 2 )
+					{
+						// Add Indices for TWO triangles (bottom right).
+						int right = y * heightmap.Width + ( x + 1 ); // index + 1
+						int bottom = ( y + 1 ) * heightmap.Width + x; // Index + width
+						int bottomRight = ( y + 1 ) * heightmap.Width + ( x + 1 ); // Index + width + 1
+
+						// Triangle 1
+						indices[index * 6 + 0] = index;
+						indices[index * 6 + 1] = bottomRight;
+						indices[index * 6 + 2] = bottom;
+
+						// Triangle 2
+						indices[index * 6 + 3] = index;
+						indices[index * 6 + 4] = right;
+						indices[index * 6 + 5] = bottomRight;
+					}
+
+				}
+			}
+
+			// Calculate normals
+			for( int y = 0; y < heightmap.Height - 1; y++ )
+			{
+				for( int x = 0; x < heightmap.Width - 1; x++ )
+				{
+					int index = y * heightmap.Width + x;
+
+					int right = y * heightmap.Width + x + 1;
+					int bottom = ( y + 1 ) * heightmap.Width + x;
+
+					Vector3 vr = Vector3.Normalize( vertices[right].Position - vertices[index].Position );
+					Vector3 vd = Vector3.Normalize( vertices[bottom].Position - vertices[index].Position );
+
+					vertices[index].Normal = Vector3.Cross( vr, vd );
+				}
+			}
 		}
 
 		public override void Update( GameTime gameTime )
@@ -101,38 +165,38 @@ namespace FirstGame_OpenGL
 			if( keyState.IsKeyDown( Keys.LeftShift ) )
 			{
 				speed *= 2;
-			}
+			}           // Movement Boost
 
 			if( keyState.IsKeyDown( Keys.W ) )
 			{
 				cameraPos += delta * speed * Vector3.Transform( Vector3.Forward, cameraRotation );
-			}
+			}                   // Forward
 			else if( keyState.IsKeyDown( Keys.S ) )
 			{
 				cameraPos -= delta * speed * Vector3.Transform( Vector3.Forward, cameraRotation );
-			}
+			}              // Backwards
 			if( keyState.IsKeyDown( Keys.A ) )
 			{
 				cameraPos += delta * speed * Vector3.Transform( Vector3.Left, cameraRotation );
-			}
+			}                   // Left
 			else if( keyState.IsKeyDown( Keys.D ) )
 			{
 				cameraPos += delta * speed * Vector3.Transform( Vector3.Right, cameraRotation );
-			}
+			}              // Right
 			if( keyState.IsKeyDown( Keys.Space ) )
 			{
 				cameraPos += delta * speed * Vector3.Transform( Vector3.Up, cameraRotation );
-			}
+			}               // Up
 			else if( keyState.IsKeyDown( Keys.LeftControl ) )
 			{
 				cameraPos += delta * speed * Vector3.Transform( Vector3.Down, cameraRotation );
-			}
+			}    // Down
 
 			MouseState mState = Mouse.GetState();
 			int deltaX = mState.X - mouseX;
 			int deltaY = mState.Y - mouseY;
 
-			float sensitivity = 0.01f;
+			float sensitivity = 0.005f;
 
 			yaw -= deltaX * sensitivity;
 			pitch -= deltaY * sensitivity;
@@ -189,7 +253,7 @@ namespace FirstGame_OpenGL
 			effect.Parameters["World"].SetValue( World );
 
 			effect.CurrentTechnique.Passes[0].Apply();
-			//device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices, 0, vertices.Length, indices, 0, indices.Length / 3);
+			device.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, vertices, 0, vertices.Length, indices, 0, indices.Length / 3 );
 		}
 
 		void RenderModel( Model m, Matrix parentMatrix )

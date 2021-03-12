@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace FirstGame_OpenGL
@@ -19,7 +20,16 @@ namespace FirstGame_OpenGL
 
 		public Game1()
 		{
-			_graphics = new GraphicsDeviceManager( this );
+			_graphics = new GraphicsDeviceManager( this )
+			{
+				GraphicsProfile = GraphicsProfile.HiDef,
+			};
+
+			IsMouseVisible = false;
+
+			// Cap framerate at 144hz
+			IsFixedTimeStep = true;
+			TargetElapsedTime = TimeSpan.FromSeconds( 1d / 144d ); //60);
 
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
@@ -34,7 +44,7 @@ namespace FirstGame_OpenGL
 			lessons.Add( lesson3 );
 			lessons.Add( lesson4 );
 
-			currentLesson = lesson3;
+			currentLesson = lesson1;
 		}
 
 		protected override void Initialize()
@@ -45,8 +55,8 @@ namespace FirstGame_OpenGL
 			}
 			currentLesson.Initialize();
 
-			_graphics.PreferredBackBufferWidth = 1080;
-			_graphics.PreferredBackBufferHeight = 786;
+			_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 8 * 7;
+			_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 8 * 7; ;
 			_graphics.ApplyChanges();
 
 			base.Initialize();

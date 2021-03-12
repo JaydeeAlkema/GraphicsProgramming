@@ -122,10 +122,10 @@ namespace FirstGame_OpenGL
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			myEffect = Content.Load<Effect>( "Lesson2" );
+			myEffect = Content.Load<Effect>( "Lesson2_Resources/Lesson2" );
 
-			cubeTexture = Content.Load<Texture2D>( "Bricks051_1K_Color" );
-			cubeTextureNormal = Content.Load<Texture2D>( "Bricks051_1K_Normal" );
+			cubeTexture = Content.Load<Texture2D>( "Lesson2_Resources/Bricks051_1K_Color" );
+			cubeTextureNormal = Content.Load<Texture2D>( "Lesson2_Resources/Bricks051_1K_Normal" );
 		}
 
 		public override void Draw( GameTime gameTime, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )

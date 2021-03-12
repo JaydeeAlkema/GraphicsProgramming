@@ -11,8 +11,9 @@ namespace FirstGame_OpenGL
 		private Effect effect;
 		Vector3 LightPosition = Vector3.Right * 2 + Vector3.Up * 2 + Vector3.Backward * 2;
 
-		Model sphere;
+		Model sphere, cube;
 		Texture2D day, night, clouds, moon;
+		TextureCube sky;
 
 		float yaw, pitch;
 		int prevX, prevY;
@@ -35,15 +36,19 @@ namespace FirstGame_OpenGL
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			effect = Content.Load<Effect>( "Lesson3" );
+			effect = Content.Load<Effect>( "Lesson3_Resources/Lesson3" );
 
-			day = Content.Load<Texture2D>( "day" );
-			night = Content.Load<Texture2D>( "night" );
-			clouds = Content.Load<Texture2D>( "clouds" );
-			moon = Content.Load<Texture2D>( "2k_moon" );
+			day = Content.Load<Texture2D>( "Lesson3_Resources/day" );
+			night = Content.Load<Texture2D>( "Lesson3_Resources/night" );
+			clouds = Content.Load<Texture2D>( "Lesson3_Resources/clouds" );
+			moon = Content.Load<Texture2D>( "Lesson3_Resources/2k_moon" );
+			sky = Content.Load<TextureCube>( "Lesson4_Resources/sky_cube" );
 
-			sphere = Content.Load<Model>( "uv_sphere" );
+			sphere = Content.Load<Model>( "Lesson3_Resources/uv_sphere" );
+			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
+
 			LoadModelEffects( sphere );
+			LoadModelEffects( cube );
 		}
 
 		public override void Draw( GameTime gameTime, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
@@ -63,13 +68,25 @@ namespace FirstGame_OpenGL
 
 			device.Clear( Color.Black );
 
+			// Sky
+			effect.CurrentTechnique = effect.Techniques["Sky"];
+			device.DepthStencilState = DepthStencilState.None;
+			device.RasterizerState = RasterizerState.CullNone;
+			RenderModel( cube, Matrix.CreateTranslation( cameraPos ) );
+
 			// Earth
+			device.DepthStencilState = DepthStencilState.Default;
+			device.RasterizerState = RasterizerState.CullCounterClockwise;
 			effect.CurrentTechnique = effect.Techniques["Earth"];
-			RenderModel( sphere, Matrix.CreateScale( 0.01f ) * Matrix.CreateRotationZ( time ) * Matrix.CreateRotationY( MathF.PI / 180 * 23 ) * World );
+			RenderModel( sphere, Matrix.CreateScale( 0.01f ) *
+			Matrix.CreateRotationZ( time ) *
+			Matrix.CreateRotationY( MathF.PI / 180 * 23 ) * World );
 
 			// Moon
 			effect.CurrentTechnique = effect.Techniques["Moon"];
-			RenderModel( sphere, Matrix.CreateTranslation( Vector3.Down * 8 ) * Matrix.CreateScale( 0.0033f ) * Matrix.CreateRotationZ( time - time * 0.03333333f ) * World );
+			RenderModel( sphere, Matrix.CreateTranslation( Vector3.Down * 8 ) *
+			Matrix.CreateScale( 0.0033f ) *
+			Matrix.CreateRotationZ( time - time * 0.03333333f ) * World );
 		}
 
 		private void SetEffectParameters( GraphicsDevice device, float time, Vector3 cameraPos, Matrix World, Matrix View )
@@ -82,6 +99,7 @@ namespace FirstGame_OpenGL
 			effect.Parameters["NightTex"].SetValue( night );
 			effect.Parameters["CloudsTex"].SetValue( clouds );
 			effect.Parameters["MoonTex"].SetValue( moon );
+			effect.Parameters["SkyTex"].SetValue( sky );
 
 			effect.Parameters["LightPosition"].SetValue( LightPosition );
 			effect.Parameters["CameraPosition"].SetValue( cameraPos );

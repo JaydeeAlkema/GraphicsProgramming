@@ -13,7 +13,7 @@ namespace FirstGame_OpenGL
 	{
 
 		private Effect effect;
-		private Texture2D heightmap, dirt, dirt_norm, dirt_spec, water, foam, waterNormal;
+		private Texture2D heightmap, dirt, dirt_norm, dirt_spec, water, water_norm, water_foam, grass, grass_norm, rock, rock_norm, snow, snow_norm;
 		private TextureCube sky;
 		private Model cube;
 
@@ -67,7 +67,28 @@ namespace FirstGame_OpenGL
 		{
 			effect = Content.Load<Effect>( "Lesson4_Resources/Lesson4" );
 			heightmap = Content.Load<Texture2D>( "Lesson4_Resources/Heightmap_2_LowRes" );
+
+
+			// Water Texture
+			water = Content.Load<Texture2D>( "Lesson4_Resources/Water_001_COLOR" );
+			water_norm = Content.Load<Texture2D>( "Lesson4_Resources/Water_001_NORM" );
+
+			// Dirt Texture
 			dirt = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Color" );
+			dirt_norm = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Normal" );
+
+			// Grass Texture
+			grass = Content.Load<Texture2D>( "Lesson4_Resources/Ground037_2K_Color" );
+			grass_norm = Content.Load<Texture2D>( "Lesson4_Resources/Ground037_2K_Normal" );
+
+			// Rock Texture
+			rock = Content.Load<Texture2D>( "Lesson4_Resources/Rock034_2K_Color" );
+			rock_norm = Content.Load<Texture2D>( "Lesson4_Resources/Rock034_2K_Normal" );
+
+			// Snow Texure
+			snow = Content.Load<Texture2D>( "Lesson4_Resources/Snow006_2K_Color" );
+			snow_norm = Content.Load<Texture2D>( "Lesson4_Resources/Snow006_2K_Normal" );
+
 
 			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
 			foreach( ModelMesh mesh in cube.Meshes )
@@ -78,7 +99,7 @@ namespace FirstGame_OpenGL
 				}
 			}
 
-			GeneratePlane( 2.0f, 96.0f );
+			GeneratePlane( 8.0f, 256.0f );
 		}
 
 		private void GeneratePlane( float gridSize = 8.0f, float height = 128f )
@@ -237,7 +258,11 @@ namespace FirstGame_OpenGL
 			effect.Parameters["CameraPosition"].SetValue( cameraPos );
 
 			// Textures
+			effect.Parameters["WaterTex"].SetValue( water );
 			effect.Parameters["DirtTex"].SetValue( dirt );
+			effect.Parameters["GrassTex"].SetValue( grass );
+			effect.Parameters["RockTex"].SetValue( rock );
+			effect.Parameters["SnowTex"].SetValue( snow );
 
 			// Render Sky
 			device.RasterizerState = RasterizerState.CullNone;

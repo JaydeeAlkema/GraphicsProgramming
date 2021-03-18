@@ -135,6 +135,30 @@
 /processorParam:TextureFormat=Compressed
 /build:Lesson4_Resources/cube.obj
 
+#begin Lesson4_Resources/Ground037_2K_Color.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Ground037_2K_Color.png
+
+#begin Lesson4_Resources/Ground037_2K_Normal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Ground037_2K_Normal.png
+
 #begin Lesson4_Resources/Ground039_2K_Color.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -158,30 +182,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Lesson4_Resources/Ground039_2K_Normal.png
-
-#begin Lesson4_Resources/Heightmap_1_HighRes.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Lesson4_Resources/Heightmap_1_HighRes.png
-
-#begin Lesson4_Resources/Heightmap_1_LowRes.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Lesson4_Resources/Heightmap_1_LowRes.png
 
 #begin Lesson4_Resources/Heightmap_2_HighRes.png
 /importer:TextureImporter
@@ -213,6 +213,30 @@
 /processorParam:DebugMode=Auto
 /build:Lesson4_Resources/Lesson4.fx
 
+#begin Lesson4_Resources/Rock034_2K_Color.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Rock034_2K_Color.png
+
+#begin Lesson4_Resources/Rock034_2K_Normal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Rock034_2K_Normal.png
+
 #begin Lesson4_Resources/sky_cube.dds
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -224,4 +248,52 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Lesson4_Resources/sky_cube.dds
+
+#begin Lesson4_Resources/Snow006_2K_Color.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Snow006_2K_Color.png
+
+#begin Lesson4_Resources/Snow006_2K_Normal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Snow006_2K_Normal.png
+
+#begin Lesson4_Resources/Water_001_COLOR.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Water_001_COLOR.png
+
+#begin Lesson4_Resources/Water_001_NORM.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lesson4_Resources/Water_001_NORM.png
 

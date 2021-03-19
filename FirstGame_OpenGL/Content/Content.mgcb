@@ -315,3 +315,15 @@
 /processorParam:DebugMode=Auto
 /build:Lesson5_Resources/Lesson5.fx
 
+#begin Lesson6_Resources/Lesson6.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Lesson6_Resources/Lesson6.fx
+
+#begin Lesson6_Resources/PostEffects.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Lesson6_Resources/PostEffects.fx
+

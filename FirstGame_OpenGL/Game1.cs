@@ -26,17 +26,16 @@ namespace FirstGame_OpenGL
 			TargetElapsedTime = TimeSpan.FromSeconds( 1d / 144d ); //60);
 
 			Content.RootDirectory = "Content";
-			IsMouseVisible = true;
 
-			currentLesson = new Lesson5();
+			currentLesson = new Lesson6();
 		}
 
 		protected override void Initialize()
 		{
 			currentLesson.Initialize();
 
-			_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 8 * 7;
-			_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 8 * 7; ;
+			_graphics.PreferredBackBufferWidth = 1600;
+			_graphics.PreferredBackBufferHeight = 900;
 			_graphics.ApplyChanges();
 
 			base.Initialize();

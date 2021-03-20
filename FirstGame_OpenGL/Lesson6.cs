@@ -16,7 +16,7 @@ namespace FirstGame_OpenGL
 		private Texture2D heightmap, dirt, water, water_Normal, grass, grass_Transparent, rock, snow;
 		private TextureCube sky;
 		private Model cube, sphere;
-		RenderTarget2D rt1, rt2;
+		RenderTarget2D rt1, rt2, rt3;
 		Texture2D backBuffer;
 		Color[] backBufferPixels;
 
@@ -68,31 +68,31 @@ namespace FirstGame_OpenGL
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			effect = Content.Load<Effect>( "Lesson6_Resources/Lesson6" );
-			postfx = Content.Load<Effect>( "Lesson6_Resources/PostEffects" );
-			heightmap = Content.Load<Texture2D>( "Lesson4_Resources/Heightmap_2_LowRes" );
+			effect = Content.Load<Effect>( "Shaders/Lesson6" );
+			postfx = Content.Load<Effect>( "Shaders/PostEffects" );
+			heightmap = Content.Load<Texture2D>( "Textures/Heightmap_2_LowRes" );
 
 			// Water Texture
-			water = Content.Load<Texture2D>( "Lesson4_Resources/Water_001_COLOR" );
-			water_Normal = Content.Load<Texture2D>( "Lesson4_Resources/Water_001_NORM" );
+			water = Content.Load<Texture2D>( "Textures/Water_001_COLOR" );
+			water_Normal = Content.Load<Texture2D>( "Textures/Water_001_NORM" );
 
 			// Dirt Texture
-			dirt = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Color" );
+			dirt = Content.Load<Texture2D>( "Textures/Ground039_2K_Color" );
 
 			// Grass Texture
-			grass = Content.Load<Texture2D>( "Lesson4_Resources/Ground037_2K_Color" );
+			grass = Content.Load<Texture2D>( "Textures/Ground037_2K_Color" );
 
 			// Rock Texture
-			rock = Content.Load<Texture2D>( "Lesson4_Resources/Rock034_2K_Color" );
+			rock = Content.Load<Texture2D>( "Textures/Rock034_2K_Color" );
 
 			// Snow Texure
-			snow = Content.Load<Texture2D>( "Lesson4_Resources/Snow006_2K_Color" );
+			snow = Content.Load<Texture2D>( "Textures/Snow006_2K_Color" );
 
 			// Grass Transparent Texture
-			grass_Transparent = Content.Load<Texture2D>( "Lesson5_Resources/GrassTransparent" );
+			grass_Transparent = Content.Load<Texture2D>( "Textures/GrassTransparent" );
 
 
-			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
+			cube = Content.Load<Model>( "Models/cube" );
 			foreach( ModelMesh mesh in cube.Meshes )
 			{
 				foreach( ModelMeshPart meshPart in mesh.MeshParts )
@@ -101,7 +101,7 @@ namespace FirstGame_OpenGL
 				}
 			}
 
-			sphere = Content.Load<Model>( "Lesson3_Resources/uv_sphere" );
+			sphere = Content.Load<Model>( "Models/uv_sphere" );
 			foreach( ModelMesh mesh in sphere.Meshes )
 			{
 				foreach( ModelMeshPart meshPart in mesh.MeshParts )
@@ -123,6 +123,12 @@ namespace FirstGame_OpenGL
 										false,
 										graphics.PreferredBackBufferFormat, graphics.PreferredDepthStencilFormat
 			);
+
+			//rt3 = new RenderTarget2D( graphics.GraphicsDevice,
+			//							graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight,
+			//							false,
+			//							graphics.PreferredBackBufferFormat, graphics.PreferredDepthStencilFormat
+			//);
 
 			backBuffer = new Texture2D( graphics.GraphicsDevice,
 										graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight,
@@ -357,6 +363,11 @@ namespace FirstGame_OpenGL
 			postfx.CurrentTechnique = postfx.Techniques["ChromaticAberration"];
 			device.SetRenderTarget( rt2 );
 			spriteBatch.Draw( rt1, Vector2.Zero, Color.White );
+
+			// Motion Blur
+			//postfx.CurrentTechnique = postfx.Techniques["MotionBlur"];
+			//device.SetRenderTarget( rt3 );
+			//spriteBatch.Draw( rt2, Vector2.Zero, Color.White );
 
 			spriteBatch.End();
 

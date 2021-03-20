@@ -27,7 +27,7 @@ namespace FirstGame_OpenGL
 
 			Content.RootDirectory = "Content";
 
-			currentLesson = new Lesson5();
+			currentLesson = new Lesson6();
 		}
 
 		protected override void Initialize()

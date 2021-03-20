@@ -11,6 +11,8 @@ float4x4 World, View, Projection;
 
 float3 LightPosition;
 
+float normalStrenth;
+
 Texture2D MainTex;
 sampler2D MainTextureSampler = sampler_state
 {
@@ -59,12 +61,12 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float4 normalColor = tex2D(NormalTextureSampler, input.uv);
 
 	float3 perturbedNormal = input.worldNormal;
-	perturbedNormal.rg += (normalColor.rg * 2 - 1) * 2;
+	perturbedNormal.rg += (normalColor.rg * 2 - 1) * normalStrenth;
 	perturbedNormal = normalize(perturbedNormal);
 
 	float3 lightDirection = normalize(input.worldPos - LightPosition);
 
-	float light = max(dot(perturbedNormal, -lightDirection), 0.0);
+	float light = max(dot(perturbedNormal, -lightDirection), 0.1);
 
 	return float4(light * texColor.rgb, 1);
 }

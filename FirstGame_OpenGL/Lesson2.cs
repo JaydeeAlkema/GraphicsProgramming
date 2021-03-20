@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace FirstGame_OpenGL
 {
@@ -115,17 +116,32 @@ namespace FirstGame_OpenGL
 
 		private Effect myEffect;
 
-		private Texture2D cubeTexture;
-		private Texture2D cubeTextureNormal;
+		private List<Texture2D> textures = new List<Texture2D>();
+		private List<Texture2D> texturesNormals = new List<Texture2D>();
+
+		private SpriteFont arial;
+
+		private int textureIndex = 0;
+		private float normalsStrength = 1;
+
+		private bool keyPressed = false;
 
 		Vector3 LightPosition = Vector3.Right * 2 + Vector3.Up * 2 + Vector3.Backward * 2;
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			myEffect = Content.Load<Effect>( "Lesson2_Resources/Lesson2" );
+			myEffect = Content.Load<Effect>( "Shaders/Lesson2" );
 
-			cubeTexture = Content.Load<Texture2D>( "Lesson2_Resources/Bricks051_1K_Color" );
-			cubeTextureNormal = Content.Load<Texture2D>( "Lesson2_Resources/Bricks051_1K_Normal" );
+			LoadTextures( Content );
+
+			// Load Font
+			arial = Content.Load<SpriteFont>( "Fonts/Default" );
+		}
+
+		public override void Update( GameTime gameTime )
+		{
+			ChangeTextureIndexOnInput();
+			ChangeNormalsStrengthOnInput();
 		}
 
 		public override void Draw( GameTime gameTime, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
@@ -143,14 +159,70 @@ namespace FirstGame_OpenGL
 			myEffect.Parameters["World"].SetValue( World );
 			myEffect.Parameters["View"].SetValue( View );
 			myEffect.Parameters["Projection"].SetValue( Matrix.CreatePerspectiveFieldOfView( ( MathF.PI / 180f ) * 25f, device.Viewport.AspectRatio, 0.001f, 1000f ) );
-			myEffect.Parameters["MainTex"].SetValue( cubeTexture );
-			myEffect.Parameters["NormalTex"].SetValue( cubeTextureNormal );
+			myEffect.Parameters["MainTex"].SetValue( textures[textureIndex] );
+			myEffect.Parameters["NormalTex"].SetValue( texturesNormals[textureIndex] );
 			myEffect.Parameters["LightPosition"].SetValue( LightPosition );
+			myEffect.Parameters["normalStrenth"].SetValue( normalsStrength );
 
-			myEffect.CurrentTechnique.Passes[0].Apply( );
+			myEffect.CurrentTechnique.Passes[0].Apply();
 
 			device.Clear( Color.Black );
 			device.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, vertices, 0, vertices.Length, indices, 0, indices.Length / 3 );
+
+			// Draw Text to Screen
+			spriteBatch.Begin();
+			spriteBatch.DrawString( arial, "Press 0-5 to change texture. - Current Texture Index: " + textureIndex, new Vector2( 0, 0 ), Color.White );
+			spriteBatch.DrawString( arial, "Press +/- to change Normals Intensity. - Current Normals Strength: " + normalsStrength, new Vector2( 0, 16 ), Color.White );
+			spriteBatch.End();
+		}
+
+		private void ChangeTextureIndexOnInput()
+		{
+			if( Keyboard.GetState().IsKeyDown( Keys.D1 ) ) textureIndex = 1;
+			if( Keyboard.GetState().IsKeyDown( Keys.D2 ) ) textureIndex = 2;
+			if( Keyboard.GetState().IsKeyDown( Keys.D3 ) ) textureIndex = 3;
+			if( Keyboard.GetState().IsKeyDown( Keys.D4 ) ) textureIndex = 4;
+			if( Keyboard.GetState().IsKeyDown( Keys.D5 ) ) textureIndex = 5;
+			if( Keyboard.GetState().IsKeyDown( Keys.D0 ) ) textureIndex = 0;
+		}
+
+		private void LoadTextures( ContentManager Content )
+		{
+			// Texture 0
+			textures.Add( Content.Load<Texture2D>( "Textures/Rock034_2K_Color" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Rock034_2K_Normal" ) );
+
+			// Texture 1
+			textures.Add( Content.Load<Texture2D>( "Textures/Bricks051_1K_Color" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Bricks051_1K_Normal" ) );
+
+			// Texture 2
+			textures.Add( Content.Load<Texture2D>( "Textures/Ground037_2K_Color" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Ground037_2K_Normal" ) );
+
+			// Texture 3
+			textures.Add( Content.Load<Texture2D>( "Textures/Ground039_2K_Color" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Ground039_2K_Normal" ) );
+
+			// Texture 4
+			textures.Add( Content.Load<Texture2D>( "Textures/Snow006_2K_Color" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Snow006_2K_Normal" ) );
+
+			// Texture 5
+			textures.Add( Content.Load<Texture2D>( "Textures/Water_001_COLOR" ) );
+			texturesNormals.Add( Content.Load<Texture2D>( "Textures/Water_001_NORM" ) );
+		}
+		private void ChangeNormalsStrengthOnInput()
+		{
+			ImprovedKeyboard.GetState();
+			if( ImprovedKeyboard.IsKeyPressed( Keys.OemPlus, true ) && normalsStrength < 10 )
+			{
+				normalsStrength++;
+			}
+			else if( ImprovedKeyboard.IsKeyPressed( Keys.OemMinus, true ) && normalsStrength > 0 )
+			{
+				normalsStrength--;
+			}
 		}
 	}
 }

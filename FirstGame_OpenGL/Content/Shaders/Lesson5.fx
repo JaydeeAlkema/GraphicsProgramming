@@ -63,6 +63,15 @@ MinFilter = ANISOTROPIC;
 MagFilter = ANISOTROPIC;
 };
 
+Texture2D TempleTex;
+sampler2D TempleTextureSampler = sampler_state
+{
+    Texture = <TempleTex>;
+MipFilter = LINEAR;
+MinFilter = ANISOTROPIC;
+MagFilter = ANISOTROPIC;
+};
+
 TextureCube SkyTex;
 samplerCUBE SkyTextureSampler = sampler_state
 {
@@ -190,6 +199,26 @@ float4 unlitTransparentPS( VertexShaderOutput input ) : COLOR
 
 	return texColor;
 }
+// Pixel Shader, receives input from vertex shader, and outputs to COLOR semantic
+float4 TemplePS( VertexShaderOutput input ) : COLOR
+{
+	float d = distance( input.worldPos, CameraPosition );
+
+	// Temple Texture
+	float3 Temple = tex2D( TempleTextureSampler, input.tex ).rgb;
+
+	float3 texColor = Temple;
+
+	// Lighting calculation
+	float3 lighting = max( dot( input.normal, LightDirection ), 0.0 ) + Ambient;
+
+	// Fog
+	float fogAmount = pow( clamp( ( d - 250 ) / 1500, 0, 1 ), 2 );
+	float3 fogColor = float3( 188, 214, 231 ) / 255.0;
+
+	// Output
+	return float4( lerp( texColor * lighting, fogColor, fogAmount ), 1 );
+}
 
 technique UnlitTransparent
 {
@@ -197,6 +226,15 @@ technique UnlitTransparent
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL unlitTransparentPS();
+	}
+};
+
+technique Temple
+{
+	pass
+	{
+		VertexShader = compile VS_SHADERMODEL MainVS();
+		PixelShader = compile PS_SHADERMODEL TemplePS();
 	}
 };
 

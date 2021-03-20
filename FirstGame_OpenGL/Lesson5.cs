@@ -14,9 +14,12 @@ namespace FirstGame_OpenGL
 
 		private Effect effect;
 		private Texture2D heightmap, dirt, water, grass, grass_Transparent, rock, snow;
+		private Texture2D templeTex;
 		private TextureCube sky;
-		private Model cube, sphere;
+		private Model cube, sphere, temple;
 		RenderTarget2D rt;
+
+		private SpriteFont arial;
 
 		[StructLayout( LayoutKind.Sequential, Pack = 1 )]
 		public struct Vert : IVertexType
@@ -62,33 +65,39 @@ namespace FirstGame_OpenGL
 		{
 			mouseX = Mouse.GetState().X;
 			mouseY = Mouse.GetState().Y;
+
 		}
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			effect = Content.Load<Effect>( "Lesson5_Resources/Lesson5" );
-			heightmap = Content.Load<Texture2D>( "Lesson4_Resources/Heightmap_2_LowRes" );
+			// Load Font
+			arial = Content.Load<SpriteFont>( "Fonts/Default" );
+
+			effect = Content.Load<Effect>( "Shaders/Lesson5" );
+			heightmap = Content.Load<Texture2D>( "Textures/Heightmap_2_LowRes" );
 
 			// Water Texture
-			water = Content.Load<Texture2D>( "Lesson4_Resources/Water_001_COLOR" );
+			water = Content.Load<Texture2D>( "Textures/Water_001_COLOR" );
 
 			// Dirt Texture
-			dirt = Content.Load<Texture2D>( "Lesson4_Resources/Ground039_2K_Color" );
+			dirt = Content.Load<Texture2D>( "Textures/Ground039_2K_Color" );
 
 			// Grass Texture
-			grass = Content.Load<Texture2D>( "Lesson4_Resources/Ground037_2K_Color" );
+			grass = Content.Load<Texture2D>( "Textures/Ground037_2K_Color" );
 
 			// Rock Texture
-			rock = Content.Load<Texture2D>( "Lesson4_Resources/Rock034_2K_Color" );
+			rock = Content.Load<Texture2D>( "Textures/Rock034_2K_Color" );
 
 			// Snow Texure
-			snow = Content.Load<Texture2D>( "Lesson4_Resources/Snow006_2K_Color" );
+			snow = Content.Load<Texture2D>( "Textures/Snow006_2K_Color" );
 
 			// Grass Transparent Texture
-			grass_Transparent = Content.Load<Texture2D>( "Lesson5_Resources/GrassTransparent" );
+			grass_Transparent = Content.Load<Texture2D>( "Textures/GrassTransparent" );
 
+			// Temple Textures
+			templeTex = Content.Load<Texture2D>( "Models/Temple" );
 
-			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
+			cube = Content.Load<Model>( "Models/cube" );
 			foreach( ModelMesh mesh in cube.Meshes )
 			{
 				foreach( ModelMeshPart meshPart in mesh.MeshParts )
@@ -97,7 +106,7 @@ namespace FirstGame_OpenGL
 				}
 			}
 
-			sphere = Content.Load<Model>( "Lesson3_Resources/uv_sphere" );
+			sphere = Content.Load<Model>( "Models/uv_sphere" );
 			foreach( ModelMesh mesh in sphere.Meshes )
 			{
 				foreach( ModelMeshPart meshPart in mesh.MeshParts )
@@ -105,6 +114,16 @@ namespace FirstGame_OpenGL
 					meshPart.Effect = effect;
 				}
 			}
+
+			temple = Content.Load<Model>( "Models/Tempel" );
+			foreach( ModelMesh mesh in temple.Meshes )
+			{
+				foreach( ModelMeshPart meshPart in mesh.MeshParts )
+				{
+					meshPart.Effect = effect;
+				}
+			}
+
 
 			GeneratePlane( 8.0f, 256.0f );
 
@@ -279,6 +298,8 @@ namespace FirstGame_OpenGL
 			effect.Parameters["RockTex"].SetValue( rock );
 			effect.Parameters["SnowTex"].SetValue( snow );
 
+			effect.Parameters["TempleTex"].SetValue( templeTex );
+
 			// Render Sky
 			device.RasterizerState = RasterizerState.CullNone;
 			device.DepthStencilState = DepthStencilState.None;
@@ -286,9 +307,13 @@ namespace FirstGame_OpenGL
 
 			RenderModel( cube, Matrix.CreateTranslation( cameraPos ) );
 
-			// Render Terrain
+			// Render Temple
 			device.RasterizerState = RasterizerState.CullCounterClockwise;
 			device.DepthStencilState = DepthStencilState.Default;
+			effect.CurrentTechnique = effect.Techniques["Temple"];
+			RenderModel( temple, World * Matrix.CreateScale( .05f ) * Matrix.CreateRotationY( -( MathF.PI / 2f ) ) * Matrix.CreateTranslation( Vector3.Right * 1900 - Vector3.Forward * 500 + Vector3.Up * 300 ) );
+
+			// Render Terrain
 			effect.CurrentTechnique = effect.Techniques["Terrain"];
 			effect.Parameters["World"].SetValue( World );
 
@@ -321,8 +346,13 @@ namespace FirstGame_OpenGL
 			//RenderModel( sphere, World * Matrix.CreateTranslation( Vector3.Right * 1024 - Vector3.Forward * 1024 + Vector3.Up * 300 ) );
 
 			// Reset Blendstate
-			device.BlendState = BlendState.Opaque;
 			device.RasterizerState = RasterizerState.CullCounterClockwise;
+			device.DepthStencilState = DepthStencilState.Default;
+
+			// Draw Text to Screen
+			spriteBatch.Begin();
+			spriteBatch.DrawString( arial, "Cam Pos: " + cameraPos, new Vector2( 0, 0 ), Color.Black );
+			spriteBatch.End();
 		}
 
 		void RenderModel( Model m, Matrix parentMatrix )

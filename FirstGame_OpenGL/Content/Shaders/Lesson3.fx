@@ -48,6 +48,15 @@ MinFilter = ANISOTROPIC;
 MagFilter = ANISOTROPIC;
 };
 
+Texture2D MarsTex;
+sampler2D MarsTextureSampler = sampler_state
+{
+	Texture = <MarsTex>;
+MipFilter = POINT;
+MinFilter = ANISOTROPIC;
+MagFilter = ANISOTROPIC;
+};
+
 TextureCube SkyTex;
 samplerCUBE SkyTextureSampler = sampler_state
 {
@@ -131,6 +140,21 @@ float4 MoonPS( VertexShaderOutput input ) : COLOR
 }
 
 // Pixel Shader, receives input from vertex shader, and outputs to COLOR semantic
+float4 MarsPS( VertexShaderOutput input ) : COLOR
+{
+	// Textures
+	float4 texColor = tex2D( MarsTextureSampler, input.uv );
+
+	// Calculate vector for lighting & specular
+	float3 lightDirection = normalize( input.worldPos - LightPosition );
+
+	// Calculate Lighting
+	float light = min( max( dot( input.worldNormal, -lightDirection ), 0.0 ) * 64, 1.0 );
+
+	return float4( max( light, 0.1 ) * texColor.rgb, 1 );
+}
+
+// Pixel Shader, receives input from vertex shader, and outputs to COLOR semantic
 float4 SkyPS( VertexShaderOutput input ) : COLOR
 {
 	float3 viewDirection = normalize( input.worldPos - CameraPosition );
@@ -155,6 +179,15 @@ technique Moon
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MoonPS();
+	}
+};
+
+technique Mars
+{
+	pass
+	{
+		VertexShader = compile VS_SHADERMODEL MainVS();
+		PixelShader = compile PS_SHADERMODEL MarsPS();
 	}
 };
 

@@ -124,8 +124,6 @@ namespace FirstGame_OpenGL
 		private int textureIndex = 0;
 		private float normalsStrength = 1;
 
-		private bool keyPressed = false;
-
 		Vector3 LightPosition = Vector3.Right * 2 + Vector3.Up * 2 + Vector3.Backward * 2;
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )

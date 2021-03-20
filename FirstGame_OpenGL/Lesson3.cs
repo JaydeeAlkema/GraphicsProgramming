@@ -11,12 +11,22 @@ namespace FirstGame_OpenGL
 		private Effect effect;
 		Vector3 LightPosition = Vector3.Right * 2 + Vector3.Up * 2 + Vector3.Backward * 2;
 
-		Model sphere, cube;
-		Texture2D day, night, clouds, moon;
-		TextureCube sky;
+		private Model sphere, cube;
+		private Texture2D day, night, clouds, moon, mars;
+		private TextureCube sky;
 
-		float yaw, pitch;
-		int prevX, prevY;
+		private float yaw, pitch;
+		private int prevX, prevY;
+
+		private int previousScrollValue;
+		private float scrollOffset = 0;
+
+		private SpriteFont arial;
+
+		public override void Initialize()
+		{
+			previousScrollValue = Mouse.GetState().ScrollWheelValue;
+		}
 
 		public override void Update( GameTime gameTime )
 		{
@@ -30,22 +40,31 @@ namespace FirstGame_OpenGL
 				pitch = MathF.Min( MathF.Max( pitch, -MathF.PI * 0.45f ), MathF.PI * 0.45f );
 			}
 
+			SetScrollOffset();
+
 			prevX = mstate.X;
 			prevY = mstate.Y;
 		}
 
 		public override void LoadContent( ContentManager Content, GraphicsDeviceManager graphics, SpriteBatch spriteBatch )
 		{
-			effect = Content.Load<Effect>( "Lesson3_Resources/Lesson3" );
+			// Load Font
+			arial = Content.Load<SpriteFont>( "Fonts/Default" );
 
-			day = Content.Load<Texture2D>( "Lesson3_Resources/day" );
-			night = Content.Load<Texture2D>( "Lesson3_Resources/night" );
-			clouds = Content.Load<Texture2D>( "Lesson3_Resources/clouds" );
-			moon = Content.Load<Texture2D>( "Lesson3_Resources/2k_moon" );
-			sky = Content.Load<TextureCube>( "Lesson4_Resources/sky_cube" );
+			effect = Content.Load<Effect>( "Shaders/Lesson3" );
 
-			sphere = Content.Load<Model>( "Lesson3_Resources/uv_sphere" );
-			cube = Content.Load<Model>( "Lesson4_Resources/cube" );
+			day = Content.Load<Texture2D>( "Textures/day" );
+			night = Content.Load<Texture2D>( "Textures/night" );
+			clouds = Content.Load<Texture2D>( "Textures/clouds" );
+
+			moon = Content.Load<Texture2D>( "Textures/2k_moon" );
+
+			mars = Content.Load<Texture2D>( "Textures/5672_mars_4k_color" );
+
+			sky = Content.Load<TextureCube>( "Textures/sky_cube" );
+
+			sphere = Content.Load<Model>( "Models/uv_sphere" );
+			cube = Content.Load<Model>( "Models/cube" );
 
 			LoadModelEffects( sphere );
 			LoadModelEffects( cube );
@@ -58,7 +77,7 @@ namespace FirstGame_OpenGL
 			float time = ( float )gameTime.TotalGameTime.TotalSeconds;
 			LightPosition = Vector3.Left * 200;
 
-			Vector3 cameraPos = ( -Vector3.Forward * 10 );
+			Vector3 cameraPos = ( -Vector3.Forward * ( 10 + scrollOffset ) );
 			cameraPos = Vector3.Transform( cameraPos, Quaternion.CreateFromYawPitchRoll( yaw, pitch, 0 ) );
 
 			Matrix World = Matrix.CreateWorld( Vector3.Zero, Vector3.Forward, Vector3.Up );
@@ -84,9 +103,21 @@ namespace FirstGame_OpenGL
 
 			// Moon
 			effect.CurrentTechnique = effect.Techniques["Moon"];
-			RenderModel( sphere, Matrix.CreateTranslation( Vector3.Down * 8 ) *
+			RenderModel( sphere, Matrix.CreateTranslation( Vector3.Down * 20 ) *
+			Matrix.CreateScale( 0.0020f ) *
+			Matrix.CreateRotationZ( time - time * 0.03333333f ) * World );
+
+			// Mars
+			effect.CurrentTechnique = effect.Techniques["Mars"];
+			RenderModel( sphere, Matrix.CreateTranslation( Vector3.Down * -20 ) *
 			Matrix.CreateScale( 0.0033f ) *
 			Matrix.CreateRotationZ( time - time * 0.03333333f ) * World );
+
+
+			// Draw Text to Screen
+			spriteBatch.Begin();
+			spriteBatch.DrawString( arial, "Use the scrollwheel to zoom in/out", new Vector2( 0, 0 ), Color.White );
+			spriteBatch.End();
 		}
 
 		private void SetEffectParameters( GraphicsDevice device, float time, Vector3 cameraPos, Matrix World, Matrix View )
@@ -99,6 +130,7 @@ namespace FirstGame_OpenGL
 			effect.Parameters["NightTex"].SetValue( night );
 			effect.Parameters["CloudsTex"].SetValue( clouds );
 			effect.Parameters["MoonTex"].SetValue( moon );
+			effect.Parameters["MarsTex"].SetValue( mars );
 			effect.Parameters["SkyTex"].SetValue( sky );
 
 			effect.Parameters["LightPosition"].SetValue( LightPosition );
@@ -133,6 +165,19 @@ namespace FirstGame_OpenGL
 					meshPart.Effect = effect;
 				}
 			}
+		}
+
+		private void SetScrollOffset()
+		{
+			if( Mouse.GetState().ScrollWheelValue < previousScrollValue )
+			{
+				scrollOffset += 2;
+			}
+			else if( Mouse.GetState().ScrollWheelValue > previousScrollValue )
+			{
+				scrollOffset -= 2;
+			}
+			previousScrollValue = Mouse.GetState().ScrollWheelValue;
 		}
 	}
 }
